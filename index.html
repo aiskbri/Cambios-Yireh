@@ -264,63 +264,87 @@
             USD_MXN: 17.8
         };
 
-        function obtenerTasa(de, a) {
-            // 1. SI ENVÍA USD (ZELLE) -> SE RESTA EL 15% AL VALOR DEL PAÍS
-            if (de === 'USD') {
-                let tasaDestino = 1;
-                if (a === 'VES') tasaDestino = PRECIOS_BASE.USD_VES;
-                if (a === 'COP') tasaDestino = PRECIOS_BASE.USD_COP;
-                if (a === 'CLP') tasaDestino = PRECIOS_BASE.USD_CLP;
-                if (a === 'PEN') tasaDestino = PRECIOS_BASE.USD_PEN;
-                if (a === 'ARS') tasaDestino = PRECIOS_BASE.USD_ARS;
-                if (a === 'MXN') tasaDestino = PRECIOS_BASE.USD_MXN;
-                if (a === 'USD_PA' || a === 'USD_EC') tasaDestino = 1;
+        function actualizar() {
+        const monto = parseFloat(document.getElementById('monto').value) || 0;
+        const de = document.getElementById('de').value;
+        const a = document.getElementById('a').value;
+        let tasa = 0;
 
-                return tasaDestino * 0.85; // Menos 15%
-            }
-
-            // 2. SI ENVÍA MONEDA LOCAL HACIA USD (ZELLE) -> REGRESOS
-            if (a === 'USD') {
-                let valorDolarEnMoneda = 1;
-                if (de === 'COP') valorDolarEnMoneda = PRECIOS_BASE.USD_COP;
-                if (de === 'CLP') valorDolarEnMoneda = PRECIOS_BASE.USD_CLP;
-                if (de === 'PEN') valorDolarEnMoneda = PRECIOS_BASE.USD_PEN;
-                if (de === 'VES') valorDolarEnMoneda = PRECIOS_BASE.USD_VES;
-
-                // Tasa inversa con margen de ganancia (12%)
-                return (1 / valorDolarEnMoneda) * 0.9; 
-            }
-
-            // 3. MONEDA LOCAL A VES (BOLÍVARES)
-            if (a === 'VES') {
-                if (de === 'COP') return (PRECIOS_BASE.USD_VES / PRECIOS_BASE.USD_COP) * 0.90;
-                if (de === 'CLP') return (PRECIOS_BASE.USD_VES / PRECIOS_BASE.USD_CLP) * 0.90;
-                if (de === 'PEN') return (PRECIOS_BASE.USD_VES / PRECIOS_BASE.USD_PEN) * 0.90;
-            }
-
-            return 0;
+        // --- REGLA 1: TODO LO QUE SALE DE ZELLE (USD) ---
+        // Se le resta el 15% a la tasa base de destino
+        if (de === 'USD') {
+            if (a === 'VES') tasa = BASE.USD_VES * 0.85;
+            else if (a === 'COP') tasa = BASE.USD_COP * 0.85;
+            else if (a === 'CLP') tasa = BASE.USD_CLP * 0.85;
+            else if (a === 'PEN') tasa = BASE.USD_PEN * 0.85;
+            else if (a === 'ARS') tasa = BASE.USD_ARS * 0.85;
+            else if (a === 'MXN') tasa = BASE.USD_MXN * 0.85;
+            else if (a === 'USD_PA' || a === 'USD_EC') tasa = 0.85; // $1 recibe $0.85
+            else tasa = 1; 
         }
 
-        function actualizarCalculo() {
-            const monto = parseFloat(document.getElementById('monto').value) || 0;
-            const de = document.getElementById('moneda-envio').value;
-            const a = document.getElementById('moneda-recibo').value;
+        // --- REGLA 2: DE MONEDA LOCAL A VES (BOLÍVARES) ---
+        else if (a === 'VES') {
+            if (de === 'COP') tasa = (BASE.USD_VES / BASE.USD_COP) * 0.90; // 10% ganancia
+            else if (de === 'CLP') tasa = (BASE.USD_VES / BASE.USD_CLP) * 0.945; // 5.5% ganancia
+            else if (de === 'PEN') tasa = (BASE.USD_VES / BASE.USD_PEN) * 0.945; // 5.5% ganancia
+        }
+
+        // --- REGLA 3: DE MONEDA LOCAL A ZELLE (USD) ---
+        else if (a === 'USD') {
+            if (de === 'COP') tasa = (1 / BASE.USD_COP) * 0.90; // Resta 10%
+            else if (de === 'CLP') tasa = (1 / BASE.USD_CLP) * 0.90;
+            else if (de === 'PEN') tasa = (1 / BASE.USD_PEN) * 0.90;
+            else if (de === 'VES') tasa = (1 / BASE.USD_VES) * 0.90;
+        }
+
+        // --- REGLA 4: VES A OTROS PAÍSES ---
+        else if (de === 'VES') {
+            let tasaUsdReal = BASE.USD_VES; 
+            if (a === 'COP') tasa = (1 / (BASE.USD_VES / BASE.USD_COP)) * 0.82; // -18%
+            else if (a === 'PEN') tasa = (1 / (BASE.USD_VES / BASE.USD_PEN)) * 1.17; // +17%
+            else if (a === 'CLP') tasa = (1 / (BASE.USD_VES / BASE.USD_CLP)) * 1.17; // +17%
+            else if (a === 'USD_EC') tasa = (1 / tasaUsdReal) * 1.08; // +8%
+            else if (a === 'USD_PA') tasa = (1 / tasaUsdReal) * 1.10; // +10%
+            else if (a === 'ARS') tasa = ((1 / tasaUsdReal) * BASE.USD_ARS) * 1.20; // +20%
+            else if (a === 'MXN') tasa = ((1 / tasaUsdReal) * BASE.USD_MXN) * 1.20; // +20%
+        }
+
+        // --- REGLA 5: CRUCES ENTRE PAÍSES (Ej: COP a CLP) ---
+        else {
+            // Convertimos origen a USD y luego a destino con 10% de margen
+            let montoEnUsd = de === 'COP' ? monto / BASE.USD_COP : de === 'PEN' ? monto / BASE.USD_PEN : monto / BASE.USD_CLP;
+            let tasaDestino = a === 'COP' ? BASE.USD_COP : a === 'PEN' ? BASE.USD_PEN : a === 'CLP' ? BASE.USD_CLP : a === 'ARS' ? BASE.USD_ARS : a === 'MXN' ? BASE.USD_MXN : 1;
+            tasa = (tasaDestino / (monto / montoEnUsd)) * 0.90;
+        }
+
+        // Mostrar resultados
+        const total = monto * tasa;
+        document.getElementById('res-total').innerText = total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('res-tasa').innerText = `1 ${de} = ${tasa.toFixed(4)} ${a}`;
+
+        // Alerta de mínimo $20
+        const monedasMin = ['MXN', 'USD_PA', 'USD_EC', 'ARS'];
+        let mostrarMin = false;
+        if (monedasMin.includes(a)) {
+            let valorUsd = de === 'USD' ? monto : (monto * (tasa / (a.includes('USD') ? 1 : 100))); // Estimación simple
+            if (valorUsd < 20) mostrarMin = true;
+        }
+        document.getElementById('aviso-min').style.display = mostrarMin ? 'block' : 'none';
             
-            if (de === a) {
-                document.getElementById('resultado').innerText = "0.00";
-                return;
-            }
-
-            const tasa = obtenerTasa(de, a);
-            const total = monto * tasa;
-
-            document.getElementById('resultado').innerText = total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('tasa-display').innerText = `1 ${de} = ${tasa.toFixed(4)} ${a}`;
-
             const mensaje = `Hola Cambios Yireh, deseo cambiar ${monto} ${de} por ${a}.`;
             document.getElementById('btn-ws').href = `https://wa.me/584127769427?text=${encodeURIComponent(mensaje)}`;
         }
+        // Horario
+    function reloj() {
+        const ven = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Caracas"}));
+        const h = ven.getHours();
+        const b = document.getElementById('status-badge');
+        if(h >= 9 && h < 19) { b.style.background="#28a745"; b.innerText="🟢 ABIERTO (9AM - 7PM)"; }
+        else { b.style.background="#dc3545"; b.innerText="🔴 CERRADO (Abre 9AM)"; }
+    }
 
+    reloj();
         actualizarCalculo();
     </script>
 </body>
