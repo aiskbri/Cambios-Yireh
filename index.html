@@ -5,7 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cambios Yireh | Calculadora Oficial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
+    <style> .pago-container {
+    padding: 20px;
+    font-family: sans-serif;
+}
+.grid-pagos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.card-pago {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+}
+.card-pago h3 {
+    margin: 5px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+.card-pago p {
+    font-size: 0.9rem;
+    color: #666;
+}
+.flag {
+    font-size: 1.5rem;
+}
+.aviso-minimo {
+    margin-top: 20px;
+    padding: 10px;
+    background: #fff3cd;
+    border-left: 5px solid #ffecb5;
+    border-radius: 4px;
+}
+        
         :root {
             --primary: #ff6600; 
             --white: #ffffff;
@@ -171,7 +206,70 @@
         const msj = encodeURIComponent(`Hola Cambios Yireh, quiero enviar ${monto} ${de} para recibir ${a}. ¿Me confirman tasa?`);
         document.getElementById('link-ws').href = `https://wa.me/584127769427?text=${msj}`;
     }
+<section id="metodos-pago" class="pago-container">
+    <h2>Nuestros Métodos de Pago</h2>
+    <div class="grid-pagos">
+        <div class="card-pago">
+            <span class="flag">🇻🇪</span>
+            <h3>VES Bolívares</h3>
+            <p>Todos los bancos del país y Pago Móvil.</p>
+        </div>
 
+        <div class="card-pago">
+            <span class="flag">🇨🇱</span>
+            <h3>CLP Pesos Chilenos</h3>
+            <p>Todos los bancos del país.</p>
+        </div>
+
+        <div class="card-pago">
+            <span class="flag">🇵🇪</span>
+            <h3>PEN Soles</h3>
+            <p>BCP, Yape, Transferencia Interbancaria.</p>
+        </div>
+
+        <div class="card-pago">
+            <span class="flag">🇨🇴</span>
+            <h3>COP Pesos Colombianos</h3>
+            <p>Nequi, Bancolombia, Transfiya.</p>
+        </div>
+
+        <div class="card-pago">
+            <span class="flag">💵</span>
+            <h3>USD Digital</h3>
+            <p>Zelle, Zinli.</p>
+        </div>
+
+        <div class="card-pago">
+            <span class="flag">🇵🇦</span>
+            <h3>USD Panamá</h3>
+            <p>Banco General, Mercantil, Banistmo, Banesco, Yappi. (Mínimo 20$)</p>
+        </div>
+
+        <div class="card-pago">
+            <span class="flag">🇪🇨</span>
+            <h3>USD Ecuador</h3>
+            <p>Pichincha, Guayaquil, Produbanco. (Mínimo 20$)</p>
+        </div>
+
+        <div class="card-pago">
+            <span class="flag">🇦🇷</span>
+            <h3>ARS Pesos Argentinos</h3>
+            <p>Mercado Pago, Ualá, Brubank. (Mínimo 20$)</p>
+        </div>
+
+        <div class="card-pago">
+            <span class="flag">🇲🇽</span>
+            <h3>MXN Pesos Mexicanos</h3>
+            <p>BBVA, Citibanamex, STP, Mercado Pago. (Mínimo 20$)</p>
+        </div>
+    </div>
+    
+    <div class="aviso-minimo">
+        <p>⚠️ <strong>Nota:</strong> Para México, Argentina, Panamá y Ecuador, el monto mínimo de operación es de 20$.</p>
+    </div>
+</section>
+    }
+    
     // Horario
     function reloj() {
         const ven = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Caracas"}));
