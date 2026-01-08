@@ -158,8 +158,8 @@
     </header>
 
     <div class="hero">
-        <h1>Tu Dinero Seguro</h1>
-        <p>Calcula tu cambio con tasas actualizadas</p>
+        <h1>Tu Dinero Rápido y Seguro</h1>
+        <p>Calcula tu cambio con las mejores tasas del mercado</p>
     </div>
 
     <div class="calc-container">
@@ -256,12 +256,12 @@
     <script>
         // CONFIGURACIÓN DE TASAS BASE (REFERENCIALES)
         const PRECIOS_BASE = {
-            USD_VES: 60.00, 
-            USD_COP: 4200,
-            USD_CLP: 950,
-            USD_PEN: 3.75,
-            USD_ARS: 1100,
-            USD_MXN: 18.50
+            USD_VES: 720, 
+            USD_COP: 3800,
+            USD_CLP: 901,
+            USD_PEN: 3.40,
+            USD_ARS: 1510,
+            USD_MXN: 17.8
         };
 
         function obtenerTasa(de, a) {
@@ -287,8 +287,8 @@
                 if (de === 'PEN') valorDolarEnMoneda = PRECIOS_BASE.USD_PEN;
                 if (de === 'VES') valorDolarEnMoneda = PRECIOS_BASE.USD_VES;
 
-                // Tasa inversa con margen de ganancia (10%)
-                return (1 / valorDolarEnMoneda) * 0.90; 
+                // Tasa inversa con margen de ganancia (12%)
+                return (1 / valorDolarEnMoneda) * 0.9; 
             }
 
             // 3. MONEDA LOCAL A VES (BOLÍVARES)
