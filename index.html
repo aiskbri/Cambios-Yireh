@@ -156,9 +156,9 @@
                 else if (de === 'USD') tasaFinal = tasaBase * 0.85;   // 15% ganancia
             }
             else {
-                // TASAS CRUZADAS INTERNACIONALES Y CLP/PEN/COP A USD (Ganancia 12% según instrucción)
+                // TASAS CRUZADAS INTERNACIONALES Y CLP/PEN/COP A USD (Ganancia 15% según instrucción)
                 let montoEnUSD = monto / VALORES_USD[de];
-                let margen = (de === 'USD') ? 0.85 : 0.88; 
+                let margen = (de === 'USD') ? 0.83 : 0.85; 
                 let totalTemp = (montoEnUSD * margen) * VALORES_USD[a];
                 tasaFinal = totalTemp / monto;
             }
