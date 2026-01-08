@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Envíos | TuRemesa</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --accent-color: #00a8e8;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --text-light: #666;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .calculator-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .currency-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 5px;
+            background: #fff;
+            transition: border-color 0.3s;
+        }
+
+        .currency-wrapper:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+
+        input[type="number"] {
+            border: none;
+            outline: none;
+            font-size: 1.2rem;
+            padding: 10px;
+            width: 100%;
+            color: var(--text-color);
+        }
+
+        select {
+            border: none;
+            outline: none;
+            background: #f0f2f5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .exchange-rate-display {
+            background-color: #eef7fe;
+            color: var(--primary-color);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .details-section {
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .detail-row.total {
+            font-weight: bold;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #004494;
+        }
+
+        /* Indicador de carga simple */
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-card">
+    <h1>Enviar Dinero</h1>
+
+    <div class="exchange-rate-display">
+        1 <span id="label-send">USD</span> = <span id="display-rate">0.00</span> <span id="label-receive">VES</span>
+    </div>
+
+    <div class="input-group">
+        <label for="send-amount">Tú envías</label>
+        <div class="currency-wrapper">
+            <input type="number" id="send-amount" placeholder="100.00" value="100">
+            <select id="currency-send">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label for="receive-amount">El destinatario recibe</label>
+        <div class="currency-wrapper">
+            <input type="number" id="receive-amount" placeholder="0.00">
+            <select id="currency-receive">
+                <option value="VES">VES (Venezuela)</option>
+                <option value="COP">COP (Colombia)</option>
+                <option value="MXN">MXN (México)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="details-section">
+        <div class="detail-row">
+            <span>Comisión de servicio:</span>
+            <span id="fee-display">$0.00</span>
+        </div>
+        <div class="detail-row">
+            <span>Cantidad a convertir:</span>
+            <span id="amount-to-convert">$0.00</span>
+        </div>
+        <div class="detail-row total">
+            <span>Total a pagar:</span>
+            <span id="total-pay">$0.00</span>
+        </div>
+    </div>
+
+    <button class="cta-button" onclick="alert('Aquí iría la integración con tu pasarela de pago.')">Continuar</button>
+</div>
+
+<script>
+    // --- CONFIGURACIÓN DE TASAS ---
+    // Aquí defines tus tasas reales y comisiones
+    const RATES = {
+        USD: {
+            VES: 55.40, // Ejemplo: 1 USD = 55.40 Bolívares
+            COP: 4100.00,
+            MXN: 17.50
+        },
+        EUR: {
+            VES: 60.10,
+            COP: 4450.00,
+            MXN: 19.20
+        }
+    };
+
+    // Configuración de comisiones (Ejemplo: 3% + $2 fijo)
+    const FEES = {
+        percent: 0.03, // 3%
+        fixed: 2.00    // 2.00 en moneda de origen
+    };
+
+    // Elementos del DOM
+    const sendInput = document.getElementById('send-amount');
+    const receiveInput = document.getElementById('receive-amount');
+    const currencySend = document.getElementById('currency-send');
+    const currencyReceive = document.getElementById('currency-receive');
+    
+    const displayRate = document.getElementById('display-rate');
+    const labelSend = document.getElementById('label-send');
+    const labelReceive = document.getElementById('label-receive');
+    
+    const feeDisplay = document.getElementById('fee-display');
+    const amountConvertDisplay = document.getElementById('amount-to-convert');
+    const totalPayDisplay = document.getElementById('total-pay');
+
+    // Función principal de cálculo
+    function calculate(source) {
+        const sCurrency = currencySend.value;
+        const rCurrency = currencyReceive.value;
+        const rate = RATES[sCurrency][rCurrency];
+
+        // Actualizar etiquetas visuales
+        displayRate.textContent = rate.toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        labelSend.textContent = sCurrency;
+        labelReceive.textContent = rCurrency;
+
+        let sendVal, receiveVal, fee, convertAmount;
+
+        if (source === 'send') {
+            // El usuario escribe cuánto quiere enviar (TOTAL a pagar)
+            sendVal = parseFloat(sendInput.value) || 0;
+            
+            // Lógica: Del total enviado, restamos la comisión y convertimos el resto
+            // Fórmula: (Total - FixedFee) / (1 + PercentFee) = Monto a Convertir
+            // Nota: Esta lógica varía según tu modelo de negocio. 
+            // Modelo simple: La comisión se descuenta de lo que envían.
+            
+            fee = (sendVal * FEES.percent) + FEES.fixed;
+            convertAmount = sendVal - fee;
+
+            if (convertAmount < 0) convertAmount = 0;
+            
+            receiveVal = convertAmount * rate;
+            
+            // Actualizar input de recepción
+            receiveInput.value = receiveVal.toFixed(2);
+        
+        } else {
+            // El usuario escribe cuánto quiere que reciban (Reverse calc)
+            receiveVal = parseFloat(receiveInput.value) || 0;
+            
+            convertAmount = receiveVal / rate;
+            
+            // Calculamos cuánto tiene que enviar para que llegue ese monto
+            // Total = (ConvertAmount + FixedFee) / (1 - PercentFee) -> Aprox
+            // Para exactitud simple: Sumamos fee al final sobre el monto base
+            
+            // Comisión estimada sobre el monto a convertir
+            const estimatedFee = (convertAmount * FEES.percent) + FEES.fixed;
+            sendVal = convertAmount + estimatedFee;
+
+            fee = estimatedFee;
+            
+            // Actualizar input de envío
+            sendInput.value = sendVal.toFixed(2);
+        }
+
+        // Actualizar desglose en pantalla
+        feeDisplay.textContent = `${FEES.fixed.toFixed(2)} + ${(FEES.percent * 100)}% = ${fee.toFixed(2)} ${sCurrency}`;
+        amountConvertDisplay.textContent = `${(sendVal - fee).toFixed(2)} ${sCurrency}`;
+        totalPayDisplay.textContent = `${sendVal.toFixed(2)} ${sCurrency}`;
+    }
+
+    // Event Listeners
+    sendInput.addEventListener('input', () => calculate('send'));
+    receiveInput.addEventListener('input', () => calculate('receive'));
+    currencySend.addEventListener('change', () => calculate('send'));
+    currencyReceive.addEventListener('change', () => calculate('send'));
+
+    // Inicializar
+    calculate('send');
+</script>
+
+</body>
+</html>
