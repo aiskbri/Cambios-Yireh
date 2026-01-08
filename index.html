@@ -3,248 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cambios Yireh | Casa de Cambio</title>
+    <title>Cambios Yireh | Envío de Remesas</title>
     <style>
         :root {
-            --primary: #ff6600; /* Naranja vibrante */
-            --primary-dark: #cc5200;
-            --white: #ffffff;
-            --gray-light: #f4f4f4;
-            --text-dark: #333333;
-            --text-gray: #666666;
+            --primary: #FF6600; /* Naranja corporativo */
+            --white: #FFFFFF;
+            --bg-gray: #F8F9FA;
+            --text-dark: #2D3436;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
 
-        body {
-            background-color: var(--gray-light);
-            color: var(--text-dark);
-        }
+        body { background-color: var(--bg-gray); color: var(--text-dark); line-height: 1.6; }
 
-        /* --- HEADER --- */
-        header {
-            background-color: var(--white);
-            padding: 1rem 5%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        /* --- NAVEGACIÓN --- */
+        nav {
+            background: var(--white);
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-text { font-size: 1.4rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
 
-        .contact-header {
-            text-align: right;
-            font-size: 0.9rem;
-        }
+        .header-info { text-align: right; font-size: 0.85rem; color: #636e72; }
+        .header-info b { color: var(--primary); }
 
-        .contact-header a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        /* --- HERO & CALCULATOR --- */
+        /* --- SECCIÓN PRINCIPAL --- */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, #ff8c00 100%);
-            color: var(--white);
-            padding: 3rem 5% 6rem;
+            background: linear-gradient(135deg, #FF6600 0%, #FF9F43 100%);
+            padding: 60px 20px 100px;
             text-align: center;
+            color: white;
         }
 
-        .hero h1 {
-            margin-bottom: 1rem;
-        }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
 
-        .calculator-container {
-            max-width: 500px;
-            margin: -4rem auto 2rem;
+        /* --- CALCULADORA --- */
+        .calc-card {
+            max-width: 450px;
+            margin: -60px auto 40px;
             background: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--text-gray);
-        }
-
-        input, select {
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; color: #555; }
+        
+        select, input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #eee;
-            border-radius: 8px;
+            padding: 14px;
+            border: 2px solid #edf2f7;
+            border-radius: 12px;
             font-size: 1rem;
             outline: none;
             transition: 0.3s;
         }
 
-        input:focus, select:focus {
-            border-color: var(--primary);
-        }
+        select:focus, input:focus { border-color: var(--primary); }
 
-        .conversion-result {
-            background-color: #fff4e6;
-            border: 1px solid var(--primary);
-            color: var(--primary-dark);
-            padding: 1rem;
-            border-radius: 8px;
+        .result-display {
+            background: #fff9f4;
+            border: 2px dashed var(--primary);
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
-            margin-top: 1rem;
+            margin: 20px 0;
+            display: none;
         }
 
-        .result-amount {
-            font-size: 1.8rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        .btn-whatsapp {
-            display: block;
-            width: 100%;
-            background-color: #25D366;
+        .result-val { display: block; font-size: 2rem; font-weight: 800; color: var(--primary); }
+        
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #25D366;
             color: white;
-            text-align: center;
-            padding: 1rem;
-            border-radius: 8px;
             text-decoration: none;
+            padding: 15px;
+            border-radius: 12px;
             font-weight: bold;
-            margin-top: 1rem;
             transition: 0.3s;
         }
 
-        .btn-whatsapp:hover {
-            background-color: #1ebc57;
-        }
+        .whatsapp-btn:hover { background: #1ebc57; transform: translateY(-2px); }
 
-        /* --- ADMIN PANEL (Hidden by default) --- */
-        .admin-toggle {
-            text-align: center;
-            margin-top: 1rem;
-            cursor: pointer;
-            color: var(--text-gray);
-            font-size: 0.8rem;
-            text-decoration: underline;
-        }
-
-        #admin-panel {
-            display: none;
-            margin-top: 1rem;
-            padding: 1rem;
-            border: 1px dashed var(--text-gray);
-            background: #fafafa;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .rate-input-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-        }
-        .rate-input-group input {
-            width: 100px;
-            padding: 5px;
-        }
-
-        /* --- INFO SECTION --- */
-        .info-section {
-            padding: 2rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* --- MÉTODOS DE PAGO --- */
+        .payments-grid {
+            max-width: 1000px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
 
-        .info-card {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-top: 4px solid var(--primary);
+        .pay-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
         }
 
-        .info-card h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
+        .pay-card h4 { color: var(--primary); margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .pay-card ul { list-style: none; font-size: 0.85rem; color: #444; }
+        .pay-card li { margin-bottom: 6px; }
 
-        .info-card ul {
-            list-style: none;
-        }
+        footer { text-align: center; padding: 40px; color: #999; font-size: 0.8rem; }
 
-        .info-card li {
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-
-        footer {
-            background-color: #333;
-            color: var(--white);
-            text-align: center;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            .hero { padding-bottom: 5rem; }
-            .calculator-container { margin-top: -3rem; width: 90%; }
-        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            Cambios Yireh
+    <nav>
+        <div class="logo-container">
+            <div style="background: var(--primary); color: white; padding: 5px 10px; border-radius: 8px; font-weight: 900;">Y</div>
+            <span class="logo-text">Cambios Yireh</span>
         </div>
-        <div class="contact-header">
-            <div>Horario: 9 AM - 7 PM (Ven)</div>
-            <a href="https://wa.me/584127769427" target="_blank">WhatsApp: +58 412-7769427</a>
+        <div class="header-info">
+            Horario: <b>9 AM - 7 PM (VEN)</b><br>
+            WA: <b>+58 412-7769427</b>
         </div>
-    </header>
+    </nav>
 
     <section class="hero">
-        <h1>Envía dinero rápido y seguro</h1>
-        <p>Las mejores tasas del mercado con Cambios Yireh</p>
+        <h1>Tu dinero en minutos</h1>
+        <p>Seguridad y confianza en cada transacción</p>
     </section>
 
-    <div class="calculator-container">
-        <h2 style="text-align:center; margin-bottom: 1.5rem; color: var(--primary);">Cotizar Envío</h2>
-        
-        <div class="form-group">
-            <label>Tengo (Moneda de origen):</label>
-            <select id="currency-send" onchange="updateReceivingOptions()">
+    <div class="calc-card">
+        <div class="input-group">
+            <label>Tengo (Envías):</label>
+            <select id="from" onchange="initDestinations()">
                 <option value="USD">Dólares (USD)</option>
                 <option value="COP">Pesos Colombianos (COP)</option>
                 <option value="PEN">Soles Peruanos (PEN)</option>
@@ -253,98 +150,83 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label>Quiero enviar (Moneda destino):</label>
-            <select id="currency-receive" onchange="calculate()">
+        <div class="input-group">
+            <label>Quiero recibir en:</label>
+            <select id="to" onchange="doMath()">
                 </select>
         </div>
 
-        <div class="form-group">
+        <div class="input-group">
             <label>Monto a enviar:</label>
-            <input type="number" id="amount" placeholder="Ingrese cantidad" oninput="calculate()">
+            <input type="number" id="monto" placeholder="0.00" oninput="doMath()">
         </div>
 
-        <div class="conversion-result" id="result-box" style="display:none;">
-            <small>El destinatario recibe:</small>
-            <span class="result-amount" id="result-amount">0.00</span>
-            <small id="result-currency">XXX</small>
-            <br>
-            <small style="color: #666; font-size: 0.8rem;">Tasa aplicada: <span id="applied-rate"></span></small>
+        <div class="result-display" id="resBox">
+            <span style="font-size: 0.8rem; color: #666; text-transform: uppercase;">Recibes aproximadamente:</span>
+            <span class="result-val" id="resVal">0.00</span>
+            <span id="resCur" style="font-weight: bold; color: #666;">---</span>
         </div>
 
-        <a id="wa-link" href="#" target="_blank" class="btn-whatsapp">
-            Solicitar Cambio por WhatsApp
+        <a href="https://wa.me/584127769427" id="waBtn" target="_blank" class="whatsapp-btn">
+            Contactar por WhatsApp
         </a>
+    </div>
 
-        <div class="admin-toggle" onclick="toggleAdmin()">⚙️ Modificar Tasas (Admin)</div>
-        
-        <div id="admin-panel">
-            <h4>Editor de Tasas</h4>
-            <p style="font-size: 0.8rem; color: red; margin-bottom: 10px;">Nota: Estos cambios son temporales. Si recargas la página, volverán a los valores originales.</p>
-            <div id="rates-inputs"></div>
+    <div class="payments-grid">
+        <div class="pay-card">
+            <h4>Venezuela & Chile</h4>
+            <ul>
+                <li>• VES: Pago Móvil / Todos los bancos</li>
+                <li>• CLP: Todos los bancos nacionales</li>
+            </ul>
+        </div>
+        <div class="pay-card">
+            <h4>Perú & Colombia</h4>
+            <ul>
+                <li>• PEN: BCP, Yape, Transferencias</li>
+                <li>• COP: Nequi, Bancolombia, Transfiya</li>
+            </ul>
+        </div>
+        <div class="pay-card">
+            <h4>Dólares & Otros</h4>
+            <ul>
+                <li>• Zelle (Min 50$) / Zinli / Wally (Min 20$)</li>
+                <li>• Panamá / Ecuador / México / Argentina (Min 20$)</li>
+            </ul>
         </div>
     </div>
 
-    <section class="info-section">
-        <div class="info-card">
-            <h3>Métodos de Pago (Origen)</h3>
-            <ul>
-                <li><strong>Venezuela (VES):</strong> Pago Móvil, Todos los bancos.</li>
-                <li><strong>Chile (CLP):</strong> Todos los bancos.</li>
-                <li><strong>Perú (PEN):</strong> BCP, Yape, Transferencia Interbancaria.</li>
-                <li><strong>Colombia (COP):</strong> Nequi, Bancolombia, Transfiya, Llave Bre-B.</li>
-            </ul>
-        </div>
-
-        <div class="info-card">
-            <h3>Cuentas Digitales (USD)</h3>
-            <ul>
-                <li><strong>Zelle:</strong> Mínimo 50$</li>
-                <li><strong>Zinli:</strong> Mínimo 20$</li>
-                <li><strong>Wally:</strong> Mínimo 20$</li>
-            </ul>
-        </div>
-
-        <div class="info-card">
-            <h3>Bancos Internacionales</h3>
-            <ul>
-                <li><strong>Panamá (Min 20$):</strong> Banco General, Mercantil, Banistmo, Banesco, Yappi.</li>
-                <li><strong>Ecuador (Min 20$):</strong> Pichincha, Guayaquil, Produbanco.</li>
-                <li><strong>México (Min 20$):</strong> BBVA, Citibanamex, STP, Mercado Pago.</li>
-                <li><strong>Argentina (Min 20$):</strong> MercadoPago, Ualá, Brubank.</li>
-            </ul>
-        </div>
-    </section>
-
     <footer>
-        <p>&copy; 2024 Cambios Yireh. Todos los derechos reservados.</p>
-        <p>Maracaibo, Zulia, Venezuela.</p>
+        &copy; 2024 Cambios Yireh - La mejor tasa del mercado.
     </footer>
 
     <script>
-        // --- BASE DE DATOS DE TASAS ---
-        // 'op': '*' (multiplicar) o '/' (dividir)
-        // 'rate': el valor numérico
-        let ratesDB = {
+        /**
+         * EDITOR DE TASAS (Solo para el dueño del código)
+         * Cambia los números después de "rate:".
+         * 'op': '*' significa que el sistema multiplica el monto por la tasa.
+         * 'op': '/' significa que el sistema divide el monto entre la tasa.
+         */
+        const TASAS = {
             USD: {
                 COP: { rate: 3230, op: '*' },
                 CLP: { rate: 770, op: '*' },
                 PEN: { rate: 2.88, op: '*' },
                 VES: { rate: 570, op: '*' },
                 ARS: { rate: 1305, op: '*' },
-                ECU: { rate: 0.87, op: '*', name: 'Dólar Ecuatoriano' },
-                PAN: { rate: 0.85, op: '*', name: 'Dólar Panameño' },
+                ECU: { rate: 0.87, op: '*' },
+                PAN: { rate: 0.85, op: '*' },
                 MEX: { rate: 15.7, op: '*' }
             },
             COP: {
                 CLP: { rate: 0.214, op: '*' },
                 PEN: { rate: 0.00078, op: '*' },
-                VES: { rate: 5.8, op: '/' }, // DIVISIÓN
+                VES: { rate: 5.8, op: '/' }, // DIVIDIR
                 ARS: { rate: 0.341, op: '*' },
                 ECU: { rate: 0.000226, op: '*' },
                 PAN: { rate: 0.000221, op: '*' },
                 MEX: { rate: 0.00414, op: '*' },
-                USD: { rate: 0.233, op: '*', name: 'USD (Zelle/Zinli)' }
+                USD: { rate: 0.233, op: '*' }
             },
             PEN: {
                 CLP: { rate: 242, op: '*' },
@@ -367,134 +249,68 @@
                 USD: { rate: 0.00095, op: '*' }
             },
             VES: {
-                PEN: { rate: 283.1, op: '/' }, // DIVISIÓN
-                COP: { rate: 4, op: '*' },    // MULTIPLICACIÓN
-                CLP: { rate: 1, op: '/' },    // DIVISIÓN
-                ARS: { rate: 0.781, op: '/' }, // DIVISIÓN
-                ECU: { rate: 928, op: '/' },   // DIVISIÓN
-                PAN: { rate: 935, op: '/' },   // DIVISIÓN
-                MEX: { rate: 55.9, op: '/' },  // DIVISIÓN
-                USD: { rate: 928, op: '/' }    // DIVISIÓN
+                PEN: { rate: 283.1, op: '/' }, // DIVIDIR
+                COP: { rate: 4, op: '*' },    // MULTIPLICAR
+                CLP: { rate: 1, op: '/' },    // DIVIDIR
+                ARS: { rate: 0.781, op: '/' }, // DIVIDIR
+                ECU: { rate: 928, op: '/' },   // DIVIDIR
+                PAN: { rate: 935, op: '/' },   // DIVIDIR
+                MEX: { rate: 55.9, op: '/' },  // DIVIDIR
+                USD: { rate: 928, op: '/' }    // DIVIDIR
             }
         };
 
-        const names = {
-            USD: 'Dólares (USD)',
+        const nombres = {
+            USD: 'Dólares (Zelle/Zinli)',
             COP: 'Pesos Colombianos',
             PEN: 'Soles Peruanos',
             CLP: 'Pesos Chilenos',
-            VES: 'Bolívares',
+            VES: 'Bolívares (VES)',
             ARS: 'Pesos Argentinos',
-            ECU: 'Dólar Ecuatoriano',
-            PAN: 'Dólar Panameño',
+            ECU: 'Dólar Ecuador',
+            PAN: 'Dólar Panamá',
             MEX: 'Pesos Mexicanos'
         };
 
-        // --- FUNCIONES LÓGICAS ---
-
-        function updateReceivingOptions() {
-            const sendCurrency = document.getElementById('currency-send').value;
-            const receiveSelect = document.getElementById('currency-receive');
+        function initDestinations() {
+            const origen = document.getElementById('from').value;
+            const destinoSelect = document.getElementById('to');
+            destinoSelect.innerHTML = '';
             
-            receiveSelect.innerHTML = ''; // Limpiar opciones anteriores
-
-            const availableDestinations = ratesDB[sendCurrency];
-            
-            for (let code in availableDestinations) {
-                let option = document.createElement('option');
-                option.value = code;
-                // Usar nombre personalizado si existe en el objeto tasa, sino usar nombre genérico
-                option.text = availableDestinations[code].name || names[code] || code;
-                receiveSelect.add(option);
+            for (let moneda in TASAS[origen]) {
+                let opt = document.createElement('option');
+                opt.value = moneda;
+                opt.innerText = nombres[moneda] || moneda;
+                destinoSelect.appendChild(opt);
             }
-            calculate();
-            generateAdminInputs(); // Regenerar inputs de admin al cambiar origen
+            doMath();
         }
 
-        function calculate() {
-            const amount = parseFloat(document.getElementById('amount').value);
-            const sendCurr = document.getElementById('currency-send').value;
-            const receiveCurr = document.getElementById('currency-receive').value;
-            const resultBox = document.getElementById('result-box');
-            
-            if (!amount || amount <= 0) {
-                resultBox.style.display = 'none';
+        function doMath() {
+            const origen = document.getElementById('from').value;
+            const destino = document.getElementById('to').value;
+            const cantidad = parseFloat(document.getElementById('monto').value);
+            const box = document.getElementById('resBox');
+
+            if (!cantidad || cantidad <= 0) {
+                box.style.display = 'none';
                 return;
             }
 
-            const data = ratesDB[sendCurr][receiveCurr];
-            let result = 0;
+            const data = TASAS[origen][destino];
+            let total = data.op === '*' ? (cantidad * data.rate) : (cantidad / data.rate);
 
-            if (data.op === '*') {
-                result = amount * data.rate;
-            } else {
-                result = amount / data.rate;
-            }
+            document.getElementById('resVal').innerText = total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('resCur').innerText = destino;
+            box.style.display = 'block';
 
-            // Formateo de números
-            let formattedResult = result.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            
-            document.getElementById('result-amount').innerText = formattedResult;
-            document.getElementById('result-currency').innerText = receiveCurr;
-            document.getElementById('applied-rate').innerText = `${data.rate} (${data.op === '*' ? 'Multiplica' : 'Divide'})`;
-            resultBox.style.display = 'block';
-
-            // Actualizar enlace de WhatsApp
-            const msg = `Hola Cambios Yireh, quiero cambiar ${amount} ${sendCurr} a ${receiveCurr}. Según la web recibo aprox: ${formattedResult}.`;
-            document.getElementById('wa-link').href = `https://wa.me/584127769427?text=${encodeURIComponent(msg)}`;
+            // WhatsApp link
+            const texto = `Hola Cambios Yireh, quiero enviar ${cantidad} ${origen} para recibir en ${destino}.`;
+            document.getElementById('waBtn').href = `https://wa.me/584127769427?text=${encodeURIComponent(texto)}`;
         }
 
-        // --- FUNCIONES DE ADMINISTRADOR ---
-
-        function toggleAdmin() {
-            const panel = document.getElementById('admin-panel');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-            if(panel.style.display === 'block') generateAdminInputs();
-        }
-
-        function generateAdminInputs() {
-            const container = document.getElementById('rates-inputs');
-            container.innerHTML = '';
-            
-            // Mostrar todas las tasas existentes para editar
-            // Para simplificar, mostramos las del origen seleccionado actualmente
-            const currentSend = document.getElementById('currency-send').value;
-            const destinations = ratesDB[currentSend];
-
-            let title = document.createElement('h5');
-            title.innerText = `Editando tasas para origen: ${currentSend}`;
-            title.style.margin = "10px 0";
-            container.appendChild(title);
-
-            for (let dest in destinations) {
-                let div = document.createElement('div');
-                div.className = 'rate-input-group';
-                
-                let label = document.createElement('label');
-                label.innerText = `${currentSend} ➔ ${dest} (${destinations[dest].op})`;
-                label.style.marginBottom = "0";
-                
-                let input = document.createElement('input');
-                input.type = 'number';
-                input.value = destinations[dest].rate;
-                input.step = "0.000001";
-                input.oninput = function() {
-                    updateRate(currentSend, dest, this.value);
-                };
-
-                div.appendChild(label);
-                div.appendChild(input);
-                container.appendChild(div);
-            }
-        }
-
-        function updateRate(origin, dest, value) {
-            ratesDB[origin][dest].rate = parseFloat(value);
-            calculate(); // Recalcular inmediatamente con la nueva tasa
-        }
-
-        // Inicializar
-        updateReceivingOptions();
+        // Carga inicial
+        initDestinations();
     </script>
 </body>
 </html>
