@@ -140,12 +140,12 @@
 
             if (de === 'VES') {
                 if (a === 'COP') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.COP)) * 0.80; // Resta 20%
-                else if (a === 'PEN') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.PEN)) * 1.20; // Suma 20%
-                else if (a === 'CLP') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.CLP)) * 1.20; // Suma 20%
-                else if (a === 'USD_EC') tasaFinal = (1 / VALORES_USD.VES) * 1.10; // Suma 10%
-                else if (a === 'USD_PA') tasaFinal = (1 / VALORES_USD.VES) * 1.12; // Suma 12%
-                else if (a === 'ARS') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.ARS)) * 1.22; // Suma 22%
-                else if (a === 'MXN') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.MXN)) * 1.22; // Suma 22%
+                else if (a === 'PEN') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.PEN)) * 0.75; // Suma 20%
+                else if (a === 'CLP') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.CLP)) * 0.75; // Suma 20%
+                else if (a === 'USD_EC') tasaFinal = (1 / VALORES_USD.VES) * 0.88; // Suma 10%
+                else if (a === 'USD_PA') tasaFinal = (1 / VALORES_USD.VES) * 0.85; // Suma 12%
+                else if (a === 'ARS') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.ARS)) * 0.73; // Suma 22%
+                else if (a === 'MXN') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.MXN)) * 0.73; // Suma 22%
                 else if (a === 'USD') tasaFinal = (1 / VALORES_USD.VES) * 0.88; // Ganancia 12%
             } 
             else if (a === 'VES') {
