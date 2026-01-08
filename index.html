@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambios Yireh | Calculadora Oficial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6600; 
+            --white: #ffffff;
+            --gray: #f4f6f9;
+            --text: #333;
+        }
+        body { font-family: sans-serif; background-color: var(--gray); margin: 0; color: var(--text); }
+        header { background: var(--white); padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .hero { background: linear-gradient(135deg, #ff6600, #ff8533); color: white; padding: 40px 20px; text-align: center; }
+        .calc-container { max-width: 450px; margin: -30px auto 20px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        .result-box { background: #fff3e0; padding: 15px; border-radius: 10px; text-align: center; margin-top: 15px; border: 1px solid #ffe0b2; }
+        .result-amount { font-size: 1.8em; font-weight: bold; color: var(--primary); display: block; }
+        .rate-display { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .btn-whatsapp { display: block; background: #25D366; color: white; text-align: center; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 20px; }
+        .warning { color: #d32f2f; font-size: 0.8em; margin-top: 10px; display: none; text-align: center; }
+        footer { text-align: center; padding: 20px; font-size: 0.8em; color: #777; }
+    </style>
+</head>
+<body>
+
+<header>
+    <strong style="color:var(--primary)">CAMBIOS YIREH</strong>
+</header>
+
+<div class="hero">
+    <h2 style="margin:0">Calculadora de Tasas</h2>
+    <div id="status-badge" style="font-size:0.8em; margin-top:10px; padding:5px; border-radius:5px; display:inline-block"></div>
+</div>
+
+<div class="calc-container">
+    <div class="form-group">
+        <label>Tú envías desde:</label>
+        <select id="de" onchange="actualizar()">
+            <option value="USD">🇺🇸 USD (Zelle/Zinli)</option>
+            <option value="VES">🇻🇪 Bolívares (VES)</option>
+            <option value="COP">🇨🇴 Pesos Colombianos</option>
+            <option value="CLP">🇨🇱 Pesos Chilenos</option>
+            <option value="PEN">🇵🇪 Soles Peruanos</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Cantidad:</label>
+        <input type="number" id="monto" value="100" oninput="actualizar()">
+    </div>
+
+    <div class="form-group">
+        <label>Ellos reciben en:</label>
+        <select id="a" onchange="actualizar()">
+            <option value="VES">🇻🇪 Bolívares (VES)</option>
+            <option value="COP">🇨🇴 Pesos Colombianos</option>
+            <option value="CLP">🇨🇱 Pesos Chilenos</option>
+            <option value="PEN">🇵🇪 Soles Peruanos</option>
+            <option value="USD">🇺🇸 USD (Zelle/Zinli)</option>
+            <option value="USD_PA">🇵🇦 USD Panamá</option>
+            <option value="USD_EC">🇪🇨 USD Ecuador</option>
+            <option value="ARS">🇦🇷 Pesos Argentinos</option>
+            <option value="MXN">🇲🇽 Pesos Mexicanos</option>
+        </select>
+    </div>
+
+    <div class="result-box">
+        <span id="label-recibe">Reciben aproximadamente:</span>
+        <span class="result-amount" id="res-total">0.00</span>
+        <div class="rate-display" id="res-tasa"></div>
+    </div>
+
+    <div id="aviso-min" class="warning">⚠️ Monto mínimo: $20 USD para esta moneda.</div>
+
+    <a href="#" id="link-ws" class="btn-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+    </a>
+</div>
+
+<footer>
+    Cambios Yireh - Horario: 9 AM a 7 PM (VEN)<br>
+    WhatsApp: +58 412-7769427
+</footer>
+
+<script>
+    // --- CONFIGURACIÓN DE PRECIOS BASE (BINANCE/MERCADO) ---
+    const BASE = {
+        USD_VES: 720, // 1 USD = X Bolívares
+        USD_COP: 3780,  // 1 USD = X Pesos Col
+        USD_CLP: 901,   // 1 USD = X Pesos Chi
+        USD_PEN: 3.42,  // 1 USD = X Soles
+        USD_ARS: 1520,  // 1 USD = X Pesos Arg
+        USD_MXN: 17.8  // 1 USD = X Pesos Mex
+    };
+
+    function actualizar() {
+        const monto = parseFloat(document.getElementById('monto').value) || 0;
+        const de = document.getElementById('de').value;
+        const a = document.getElementById('a').value;
+        let tasa = 0;
+
+        // --- REGLA 1: TODO LO QUE SALE DE ZELLE (USD) ---
+        // Se le resta el 15% a la tasa base de destino
+        if (de === 'USD') {
+            if (a === 'VES') tasa = BASE.USD_VES * 0.85;
+            else if (a === 'COP') tasa = BASE.USD_COP * 0.85;
+            else if (a === 'CLP') tasa = BASE.USD_CLP * 0.85;
+            else if (a === 'PEN') tasa = BASE.USD_PEN * 0.85;
+            else if (a === 'ARS') tasa = BASE.USD_ARS * 0.85;
+            else if (a === 'MXN') tasa = BASE.USD_MXN * 0.85;
+            else if (a === 'USD_PA' || a === 'USD_EC') tasa = 0.85; // $1 recibe $0.85
+            else tasa = 1; 
+        }
+
+        // --- REGLA 2: DE MONEDA LOCAL A VES (BOLÍVARES) ---
+        else if (a === 'VES') {
+            if (de === 'COP') tasa = (BASE.USD_VES / BASE.USD_COP) * 0.90; // 10% ganancia
+            else if (de === 'CLP') tasa = (BASE.USD_VES / BASE.USD_CLP) * 0.945; // 5.5% ganancia
+            else if (de === 'PEN') tasa = (BASE.USD_VES / BASE.USD_PEN) * 0.945; // 5.5% ganancia
+        }
+
+        // --- REGLA 3: DE MONEDA LOCAL A ZELLE (USD) ---
+        else if (a === 'USD') {
+            if (de === 'COP') tasa = (1 / BASE.USD_COP) * 0.90; // Resta 10%
+            else if (de === 'CLP') tasa = (1 / BASE.USD_CLP) * 0.90;
+            else if (de === 'PEN') tasa = (1 / BASE.USD_PEN) * 0.90;
+            else if (de === 'VES') tasa = (1 / BASE.USD_VES) * 0.90;
+        }
+
+        // --- REGLA 4: VES A OTROS PAÍSES ---
+        else if (de === 'VES') {
+            let tasaUsdReal = BASE.USD_VES; 
+            if (a === 'COP') tasa = (1 / (BASE.USD_VES / BASE.USD_COP)) * 0.82; // -18%
+            else if (a === 'PEN') tasa = (1 / (BASE.USD_VES / BASE.USD_PEN)) * 1.17; // +17%
+            else if (a === 'CLP') tasa = (1 / (BASE.USD_VES / BASE.USD_CLP)) * 1.17; // +17%
+            else if (a === 'USD_EC') tasa = (1 / tasaUsdReal) * 1.08; // +8%
+            else if (a === 'USD_PA') tasa = (1 / tasaUsdReal) * 1.10; // +10%
+            else if (a === 'ARS') tasa = ((1 / tasaUsdReal) * BASE.USD_ARS) * 1.20; // +20%
+            else if (a === 'MXN') tasa = ((1 / tasaUsdReal) * BASE.USD_MXN) * 1.20; // +20%
+        }
+
+        // --- REGLA 5: CRUCES ENTRE PAÍSES (Ej: COP a CLP) ---
+        else {
+            // Convertimos origen a USD y luego a destino con 10% de margen
+            let montoEnUsd = de === 'COP' ? monto / BASE.USD_COP : de === 'PEN' ? monto / BASE.USD_PEN : monto / BASE.USD_CLP;
+            let tasaDestino = a === 'COP' ? BASE.USD_COP : a === 'PEN' ? BASE.USD_PEN : a === 'CLP' ? BASE.USD_CLP : a === 'ARS' ? BASE.USD_ARS : a === 'MXN' ? BASE.USD_MXN : 1;
+            tasa = (tasaDestino / (monto / montoEnUsd)) * 0.90;
+        }
+
+        // Mostrar resultados
+        const total = monto * tasa;
+        document.getElementById('res-total').innerText = total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('res-tasa').innerText = `1 ${de} = ${tasa.toFixed(4)} ${a}`;
+
+        // Alerta de mínimo $20
+        const monedasMin = ['MXN', 'USD_PA', 'USD_EC', 'ARS'];
+        let mostrarMin = false;
+        if (monedasMin.includes(a)) {
+            let valorUsd = de === 'USD' ? monto : (monto * (tasa / (a.includes('USD') ? 1 : 100))); // Estimación simple
+            if (valorUsd < 20) mostrarMin = true;
+        }
+        document.getElementById('aviso-min').style.display = mostrarMin ? 'block' : 'none';
+
+        // Link WhatsApp
+        const msj = encodeURIComponent(`Hola Cambios Yireh, quiero enviar ${monto} ${de} para recibir ${a}. ¿Me confirman tasa?`);
+        document.getElementById('link-ws').href = `https://wa.me/584127769427?text=${msj}`;
+    }
+
+    // Horario
+    function reloj() {
+        const ven = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Caracas"}));
+        const h = ven.getHours();
+        const b = document.getElementById('status-badge');
+        if(h >= 9 && h < 19) { b.style.background="#28a745"; b.innerText="🟢 ABIERTO (9AM - 7PM)"; }
+        else { b.style.background="#dc3545"; b.innerText="🔴 CERRADO (Abre 9AM)"; }
+    }
+
+    reloj();
+    actualizar();
+</script>
+</body>
+</html>
