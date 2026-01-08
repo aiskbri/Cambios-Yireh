@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambios Yireh | Tu dinero seguro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #ff6600; --white: #ffffff; --gray: #f4f6f9; --text: #333333; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--gray); margin: 0; color: var(--text); }
+        
+        header { 
+            background-color: var(--white); padding: 15px 20px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-align: center; 
+            position: sticky; top: 0; z-index: 100; 
+        }
+
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-transform: uppercase; }
+        
+        /* EL HORARIO QUE NO DEBE FALTAR */
+        .horario-tag { 
+            background: #fff3e0; color: #e65100; padding: 5px 15px; 
+            border-radius: 20px; font-size: 0.8rem; font-weight: bold; 
+            display: inline-block; margin-top: 8px; border: 1px solid #ffe0b2;
+        }
+
+        .hero { 
+            background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%); color: white; 
+            padding: 40px 20px 80px 20px; text-align: center; 
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; 
+        }
+
+        .calc-container { 
+            max-width: 480px; margin: -60px auto 0; background: var(--white); 
+            padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            position: relative; z-index: 10; 
+        }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #555; font-size: 0.9rem; }
+        select, input { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
+
+        .result-box { background-color: #f9f9f9; border: 1px solid #eee; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; }
+        .result-amount { font-size: 2.2rem; font-weight: bold; color: var(--primary); display: block; }
+        #tasa-info { font-size: 0.85rem; color: #777; margin-top: 5px; }
+
+        .btn-whatsapp { 
+            display: flex; justify-content: center; align-items: center; width: 100%; 
+            background-color: #25D366; color: white; padding: 16px; border-radius: 12px; 
+            font-size: 1.1rem; font-weight: bold; text-decoration: none; margin-top: 25px; transition: 0.3s;
+        }
+        .btn-whatsapp:hover { background-color: #1eb954; }
+
+        /* SECCIÓN MÉTODOS DE PAGO REESTABLECIDA */
+        .methods-section { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
+        .methods-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .method-card { background: var(--white); padding: 20px; border-radius: 15px; border-top: 5px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .method-card h4 { margin: 0 0 10px 0; color: #333; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .method-card p { margin: 5px 0; font-size: 0.9rem; color: #666; line-height: 1.4; }
+        .min-alert { color: #d32f2f; font-weight: bold; font-size: 0.85rem; display: block; margin-top: 10px; }
+        
+        footer { background-color: #222; color: white; text-align: center; padding: 40px 20px; margin-top: 60px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><i class="fas fa-exchange-alt"></i> CAMBIOS YIREH</div>
+        <div class="horario-tag"><i class="far fa-clock"></i> HORARIO: 9:00 AM - 7:00 PM (HORA VZLA)</div>
+    </header>
+
+    <div class="hero">
+        <h1>Tu Dinero Seguro</h1>
+        <p>Calcula y solicita tu cambio con las mejores tasas</p>
+    </div>
+
+    <div class="calc-container">
+        <div class="form-group">
+            <label>Tú envías:</label>
+            <select id="de" onchange="calcular()">
+                <option value="CLP">🇨🇱 CLP (Chile)</option>
+                <option value="PEN">🇵🇪 PEN (Perú)</option>
+                <option value="COP">🇨🇴 COP (Colombia)</option>
+                <option value="USD">🇺🇸 USD (Zelle / Zinli)</option>
+                <option value="VES">🇻🇪 VES (Bolívares)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Monto a enviar:</label>
+            <input type="number" id="monto" value="1000" oninput="calcular()">
+        </div>
+        <div class="form-group">
+            <label>Ellos reciben:</label>
+            <select id="a" onchange="calcular()">
+                <option value="VES">🇻🇪 VES (Bolívares)</option>
+                <option value="COP">🇨🇴 COP (Colombia)</option>
+                <option value="PEN">🇵🇪 PEN (Perú)</option>
+                <option value="CLP">🇨🇱 CLP (Chile)</option>
+                <option value="USD_EC">🇪🇨 USD (Ecuador)</option>
+                <option value="USD_PA">🇵🇦 USD (Panamá)</option>
+                <option value="ARS">🇦🇷 ARS (Argentina)</option>
+                <option value="MXN">🇲🇽 MXN (México)</option>
+                <option value="USD">🇺🇸 USD (Zelle / Zinli)</option>
+            </select>
+        </div>
+        <div class="result-box">
+            <span id="resultado" class="result-amount">0.00</span>
+            <div id="tasa-info"></div>
+        </div>
+        <a href="#" id="btn-ws" target="_blank" class="btn-whatsapp">
+            <i class="fab fa-whatsapp" style="margin-right: 10px;"></i> SOLICITAR CAMBIO
+        </a>
+    </div>
+
+    <section class="methods-section">
+        <h3 style="text-align: center; margin-bottom: 30px;">Métodos de Pago y Bancos</h3>
+        <div class="methods-grid">
+            <div class="method-card"><h4>🇻🇪 Venezuela</h4><p>Todos los bancos y Pago Móvil.</p></div>
+            <div class="method-card"><h4>🇨🇱 Chile</h4><p>Todos los bancos del país.</p></div>
+            <div class="method-card"><h4>🇵🇪 Perú</h4><p>BCP, Yape, Transferencia Interbancaria.</p></div>
+            <div class="method-card"><h4>🇨🇴 Colombia</h4><p>Nequi, Bancolombia, Transfiya.</p></div>
+            <div class="method-card"><h4>💵 Digital</h4><p>USD Zelle, Zinli.</p></div>
+            <div class="method-card"><h4>🇵🇦 Panamá</h4><p>Banco General, Mercantil, Banistmo, Banesco, Yappi. <span class="min-alert">Mínimo 20$</span></p></div>
+            <div class="method-card"><h4>🇪🇨 Ecuador</h4><p>Pichincha, Guayaquil, Produbanco. <span class="min-alert">Mínimo 20$</span></p></div>
+            <div class="method-card"><h4>🇦🇷 Argentina</h4><p>MercadoPago, Ualá, Brubank. <span class="min-alert">Mínimo 20$</span></p></div>
+            <div class="method-card"><h4>🇲🇽 México</h4><p>BBVA, Citibanamex, STP, Mercado Pago. <span class="min-alert">Mínimo 20$</span></p></div>
+        </div>
+    </section>
+
+    <footer>Cambios Yireh © 2026 | WhatsApp: +58 412-7769427</footer>
+
+    <script>
+        // TASAS BASE (Ajustar según mercado)
+        const VALORES_USD = { USD: 1, VES: 61.20, CLP: 965, PEN: 3.79, COP: 4280, ARS: 1250, MXN: 19.80, USD_PA: 1, USD_EC: 1 };
+
+        function calcular() {
+            const monto = parseFloat(document.getElementById('monto').value) || 0;
+            const de = document.getElementById('de').value;
+            const a = document.getElementById('a').value;
+            let tasaFinal = 0;
+
+            if (de === 'VES') {
+                if (a === 'COP') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.COP)) * 0.80; // Resta 20%
+                else if (a === 'PEN') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.PEN)) * 1.20; // Suma 20%
+                else if (a === 'CLP') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.CLP)) * 1.20; // Suma 20%
+                else if (a === 'USD_EC') tasaFinal = (1 / VALORES_USD.VES) * 1.10; // Suma 10%
+                else if (a === 'USD_PA') tasaFinal = (1 / VALORES_USD.VES) * 1.12; // Suma 12%
+                else if (a === 'ARS') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.ARS)) * 1.22; // Suma 22%
+                else if (a === 'MXN') tasaFinal = (1 / (VALORES_USD.VES / VALORES_USD.MXN)) * 1.22; // Suma 22%
+                else if (a === 'USD') tasaFinal = (1 / VALORES_USD.VES) * 0.88; // Ganancia 12%
+            } 
+            else if (a === 'VES') {
+                let tasaBase = VALORES_USD.VES / VALORES_USD[de];
+                if (de === 'CLP') tasaFinal = tasaBase * 0.943; // 5.7% ganancia
+                else if (de === 'PEN') tasaFinal = tasaBase * 0.943; // 5.7% ganancia
+                else if (de === 'COP') tasaFinal = tasaBase * 0.89;   // 11% ganancia
+                else if (de === 'USD') tasaFinal = tasaBase * 0.85;   // 15% ganancia
+            }
+            else {
+                // TASAS CRUZADAS INTERNACIONALES Y CLP/PEN/COP A USD (Ganancia 12% según instrucción)
+                let montoEnUSD = monto / VALORES_USD[de];
+                let margen = (de === 'USD') ? 0.85 : 0.88; 
+                let totalTemp = (montoEnUSD * margen) * VALORES_USD[a];
+                tasaFinal = totalTemp / monto;
+            }
+
+            const total = monto * tasaFinal;
+            document.getElementById('resultado').innerText = total.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('tasa-info').innerText = `Tasa: 1 ${de} = ${tasaFinal.toFixed(6)} ${a}`;
+            
+            const mensaje = `Hola Cambios Yireh, deseo cambiar ${monto} ${de} para recibir ${a}.`;
+            document.getElementById('btn-ws').href = `https://wa.me/584127769427?text=${encodeURIComponent(mensaje)}`;
+        }
+        calcular();
+    </script>
+</body>
+</html>
