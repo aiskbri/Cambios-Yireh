@@ -158,12 +158,13 @@
         <div class="form-group">
             <label>Tengo (Envías):</label>
             <select id="send-curr" onchange="updateDestinations()">
-                <option value="USD">Dólares (USD)</option>
-                <option value="COP">Pesos Colombianos (COP)</option>
-                <option value="PEN">Soles Peruanos (PEN)</option>
-                <option value="CLP">Pesos Chilenos (CLP)</option>
-                <option value="VES">Bolívares (VES)</option>
-            </select>
+    <option value="USD">🇺🇸 Dólares (USD)</option>
+    <option value="COP">🇨🇴 Pesos Colombianos (COP)</option>
+    <option value="PEN">🇵🇪 Soles Peruanos (PEN)</option>
+    <option value="CLP">🇨🇱 Pesos Chilenos (CLP)</option>
+    <option value="VES">🇻🇪 Bolívares (VES)</option>
+</select>
+
         </div>
 
         <div class="form-group">
@@ -223,61 +224,62 @@
 
     <script>
         /**
-         * AQUÍ EDIDTAS LAS TASAS
+         * AQUÍ EDITAS LAS TASAS
          * op: '*' para multiplicar | op: '/' para dividir
          */
-        const RATES_DATA = {
+                const RATES_DATA = {
             USD: {
-                COP: { r: 3230, op: '*', n: 'Pesos Colombianos' },
-                CLP: { r: 770, op: '*', n: 'Pesos Chilenos' },
-                PEN: { r: 2.88, op: '*', n: 'Soles Peruanos' },
-                VES: { r: 570, op: '*', n: 'Bolívares (VES)' },
-                ARS: { r: 1305, op: '*', n: 'Pesos Argentinos' },
-                ECU: { r: 0.87, op: '*', n: 'Dólar Ecuatoriano' },
-                PAN: { r: 0.85, op: '*', n: 'Dólar Panameño' },
-                MEX: { r: 15.7, op: '*', n: 'Pesos Mexicanos' }
+                COP: { r: 3230, op: '*', n: '🇨🇴 Pesos Colombianos' },
+                CLP: { r: 770, op: '*', n: '🇨🇱 Pesos Chilenos' },
+                PEN: { r: 2.88, op: '*', n: '🇵🇪 Soles Peruanos' },
+                VES: { r: 570, op: '*', n: '🇻🇪 Bolívares (VES)' },
+                ARS: { r: 1305, op: '*', n: '🇦🇷 Pesos Argentinos' },
+                ECU: { r: 0.87, op: '*', n: '🇪🇨 Dólar Ecuatoriano' },
+                PAN: { r: 0.85, op: '*', n: '🇵🇦 Dólar Panameño' },
+                MEX: { r: 15.7, op: '*', n: '🇲🇽 Pesos Mexicanos' }
             },
             COP: {
-                CLP: { r: 0.214, op: '*', n: 'Pesos Chilenos' },
-                PEN: { r: 0.00078, op: '*', n: 'Soles Peruanos' },
-                VES: { r: 5.8, op: '/', n: 'Bolívares (VES)' },
-                ARS: { r: 0.341, op: '*', n: 'Pesos Argentinos' },
-                ECU: { r: 0.000226, op: '*', n: 'Dólar Ecuatoriano' },
-                PAN: { r: 0.000221, op: '*', n: 'Dólar Panameño' },
-                MEX: { r: 0.00414, op: '*', n: 'Pesos Mexicanos' },
-                USD: { r: 0.233, op: '*', n: 'Dólares (Zelle/Zinli)' }
+                CLP: { r: 0.214, op: '*', n: '🇨🇱 Pesos Chilenos' },
+                PEN: { r: 0.00078, op: '*', n: '🇵🇪 Soles Peruanos' },
+                VES: { r: 5.8, op: '/', n: '🇻🇪 Bolívares (VES)' },
+                ARS: { r: 0.341, op: '*', n: '🇦🇷 Pesos Argentinos' },
+                ECU: { r: 0.000226, op: '*', n: '🇪🇨 Dólar Ecuatoriano' },
+                PAN: { r: 0.000221, op: '*', n: '🇵🇦 Dólar Panameño' },
+                MEX: { r: 0.00414, op: '*', n: '🇲🇽 Pesos Mexicanos' },
+                USD: { r: 0.233, op: '*', n: '🇺🇸 Dólares (Zelle/Zinli)' }
             },
             PEN: {
-                CLP: { r: 242, op: '*', n: 'Pesos Chilenos' },
-                COP: { r: 960, op: '*', n: 'Pesos Colombianos' },
-                VES: { r: 202, op: '*', n: 'Bolívares (VES)' },
-                ARS: { r: 372, op: '*', n: 'Pesos Argentinos' },
-                ECU: { r: 0.255, op: '*', n: 'Dólar Ecuatoriano' },
-                PAN: { r: 0.25, op: '*', n: 'Dólar Panameño' },
-                MEX: { r: 4.6, op: '*', n: 'Pesos Mexicanos' },
-                USD: { r: 0.262, op: '*', n: 'Dólares (Zelle/Zinli)' }
+                CLP: { r: 242, op: '*', n: '🇨🇱 Pesos Chilenos' },
+                COP: { r: 960, op: '*', n: '🇨🇴 Pesos Colombianos' },
+                VES: { r: 202, op: '*', n: '🇻🇪 Bolívares (VES)' },
+                ARS: { r: 372, op: '*', n: '🇦🇷 Pesos Argentinos' },
+                ECU: { r: 0.255, op: '*', n: '🇪🇨 Dólar Ecuatoriano' },
+                PAN: { r: 0.25, op: '*', n: '🇵🇦 Dólar Panameño' },
+                MEX: { r: 4.6, op: '*', n: '🇲🇽 Pesos Mexicanos' },
+                USD: { r: 0.262, op: '*', n: '🇺🇸 Dólares (Zelle/Zinli)' }
             },
             CLP: {
-                PEN: { r: 0.0033, op: '*', n: 'Soles Peruanos' },
-                COP: { r: 3.6, op: '*', n: 'Pesos Colombianos' },
-                VES: { r: 0.76, op: '*', n: 'Bolívares (VES)' },
-                ARS: { r: 1.37, op: '*', n: 'Pesos Argentinos' },
-                ECU: { r: 0.00094, op: '*', n: 'Dólar Ecuatoriano' },
-                PAN: { r: 0.00092, op: '*', n: 'Dólar Panameño' },
-                MEX: { r: 0.0173, op: '*', n: 'Pesos Mexicanos' },
-                USD: { r: 0.00095, op: '*', n: 'Dólares (Zelle/Zinli)' }
+                PEN: { r: 0.0033, op: '*', n: '🇵🇪 Soles Peruanos' },
+                COP: { r: 3.6, op: '*', n: '🇨🇴 Pesos Colombianos' },
+                VES: { r: 0.76, op: '*', n: '🇻🇪 Bolívares (VES)' },
+                ARS: { r: 1.37, op: '*', n: '🇦🇷 Pesos Argentinos' },
+                ECU: { r: 0.00094, op: '*', n: '🇪🇨 Dólar Ecuatoriano' },
+                PAN: { r: 0.00092, op: '*', n: '🇵🇦 Dólar Panameño' },
+                MEX: { r: 0.0173, op: '*', n: '🇲🇽 Pesos Mexicanos' },
+                USD: { r: 0.00095, op: '*', n: '🇺🇸 Dólares (Zelle/Zinli)' }
             },
             VES: {
-                PEN: { r: 283.1, op: '/', n: 'Soles Peruanos' },
-                COP: { r: 4, op: '*', n: 'Pesos Colombianos' },
-                CLP: { r: 1, op: '/', n: 'Pesos Chilenos' },
-                ARS: { r: 0.781, op: '/', n: 'Pesos Argentinos' },
-                ECU: { r: 928, op: '/', n: 'Dólar Ecuatoriano' },
-                PAN: { r: 935, op: '/', n: 'Dólar Panameño' },
-                MEX: { r: 55.9, op: '/', n: 'Pesos Mexicanos' },
-                USD: { r: 928, op: '/', n: 'Dólares (Zelle/Zinli)' }
+                PEN: { r: 283.1, op: '/', n: '🇵🇪 Soles Peruanos' },
+                COP: { r: 4, op: '*', n: '🇨🇴 Pesos Colombianos' },
+                CLP: { r: 1, op: '/', n: '🇨🇱 Pesos Chilenos' },
+                ARS: { r: 0.781, op: '/', n: '🇦🇷 Pesos Argentinos' },
+                ECU: { r: 928, op: '/', n: '🇪🇨 Dólar Ecuatoriano' },
+                PAN: { r: 935, op: '/', n: '🇵🇦 Dólar Panameño' },
+                MEX: { r: 55.9, op: '/', n: '🇲🇽 Pesos Mexicanos' },
+                USD: { r: 928, op: '/', n: '🇺🇸 Dólares (Zelle/Zinli)' }
             }
         };
+
 
         const selectS = document.getElementById('send-curr');
         const selectR = document.getElementById('receive-curr');
